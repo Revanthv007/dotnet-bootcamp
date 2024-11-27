@@ -26,7 +26,7 @@ below are Files Info
 
 The store will send all these files into a shared path location in server. which is (D:/DailyDataLoad/<StoreCode> Ex:D:/DailyDataLoad/STHYD001 )
 
-Now The below task is the complete information about the task to push this data into Central database tables. 
+Now The below task is the complete information about the task to push this data into Central database tables.
 Todo that we need to implement a logic to see D:/DailyDataLoad folder every one hour recursively read all stores related files and validate them and store them into the DB.
 while performing this job we wanted to logs and status information about how many files got processed.
 
