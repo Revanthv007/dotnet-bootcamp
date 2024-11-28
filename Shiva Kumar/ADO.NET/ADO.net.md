@@ -78,14 +78,14 @@ PostgreSQL	    Host=myServerAddress;Database=myDataBase;Username=myUsername;Pass
 MS Access	    Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Path\To\Your\Database.accdb;
 
 
-Command: 
+Command:
 ===========
 => The Command object in ADO.NET is a fundamental component used to execute SQL queries and stored procedures against a database.
 Execution of SQL Statements: 
     You can execute SQL commands directly using the Command object.
 Stored Procedures: 
     It supports executing stored procedures with parameters.
-Parameterization: 4
+Parameterization: 
     Helps prevent SQL injection attacks by using parameterized queries.
 
 Properties of the Command Object

@@ -16,7 +16,7 @@ but we have to compromise data realtime delayed by 1 day.
 
 We finally agreed to this approach by having store level database in LAN. by end of the day their database will run the Job and generate different files with all the operations performed on that day.
 below are Files Info
-
+  
 - Store Information  => Store_yyyyMMdd.csv (Comma delimeted) Ex: Store_20241121.csv
 - Employees Information => Employee_yyyyMMdd.txt (Pipe delimeted)
 - Customer Information => Sheet1(Customer) => Customer_yyyyMMdd.xlsx 

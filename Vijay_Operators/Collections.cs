@@ -18,7 +18,9 @@ class Program1
         }
     }
 }
-
+// output:-10
+//         100
+//         3.14
 
 Program 2: Hashtable with Non-String Keys
 using System;
@@ -41,6 +43,10 @@ class Program2
         Console.WriteLine(table["2"]); 
     }
 }
+// output:- Key: 3, Value: Three
+//             Key: 1, Value: One
+//             Key: 2, Value: 2
+2
 
 Program 3: SortedList with Type Confusion
 using System;
@@ -60,9 +66,13 @@ class Program3
             Console.WriteLine($"{entry.Key} : {entry.Value}");
         }
 
-        sortedList.Add("Four", 4); 
+        sortedList.Add("Four", 4); //sortedlist must be same type of keys values.
     }
 }
+// output:- 1 : One
+//          2 : Two
+//          3 : Three
+
 
 Program 4: Stack with Peek and Pop Confusion
 using System;

@@ -1,0 +1,30 @@
+RES TASK
+
+1-For Entire process need DB.
+
+2-After Finishing Db design. I need a shared location folder. Where I have store folder details .
+Ex:- D:\DataLoad|STHYD001
+
+3-To go to this folder We need to check the folder. For this I need store details.
+
+4-For store details I need to maintain seed data in store tables in CDB.
+
+5-Get the data from store Table. And maintain to match with Stored Folders code with my Db store folder code.
+
+6-For example There n folders in shared locations I want to check each and every folder with Db store table(code).
+
+7-once I get the match result true need to build a string by this to open a files in that shared loc folders.
+
+8-To open Files .For Files I need to maintain all the data so that I can loop every filename with Pre Data file name.
+
+9-Onec matching of this was success then I need to open the file.
+
+10-We need a path to open a file .That can dynamically build when we loop through all files.
+
+11-Now need to open file And read data by following business rules.
+
+12-While reading a data need to validate the data and if the Validation was successful then data is read to push into Db or else Store data to process all fill then push to Db Table If its a store We need to update or if its is customer, order, bill, stock we need to insert to Db tables.
+
+13-While Processing the File Need to Maintain the log for everything like records with invalid data etc.
+
+14-If once the process is completed successfully. Then in need to check for the folder Processed in the store folder. Here we need pre data with Processed, Archive name so that i can loop the file and folder in store folders once match with pre Folder(processed,Archive) the i can push the file into process folder or to Archive folder.4

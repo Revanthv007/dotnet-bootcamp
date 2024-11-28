@@ -78,43 +78,45 @@ Error details for debugging.
 ### Format: Comma-delimited.
 #### Sample Data: Always ONLY 1 record will exists in this file.
 
-    StoreID,StoreCode,StoreName,City,ManagerName,ContactNumber
+    StoreID,StoreCode,StoreName,location,ManagerName,ContactNumber
     1,STHYD001,Hyderabad Main,Hyderabad,John Doe,9876543210
 
 ## 2. Employee Information (Employee.txt)
 ### Format: Pipe-delimited.
 #### Sample Data:
 
-    EmployeeCode|StoreCode|EmployeeName|Role|DateOfJoining|ContactNumber
-    Emp001|STHYD001|Alice|Cashier|2022-01-10|9876543211
-    Emp002|STHYD001|Bob|Manager|2020-03-15|9876543212
+    EmployeeCode|StoreCode|EmployeeName|Role|DateOfJoining|DateOfLeaving|ContactNumber|Gender|Salary
+    Emp001|STHYD001|Alice|Cashier|2022-01-10|Null|99513126|Male|20000
+    
 
 # 3. Customer Information (Customer.xlsx)
 ### Sheet1: Customer
 
-CustomerCode | StoreCode | Name     | Email            | ContactNumber | DateOfBirth |
-|---------|----------|------------------|---------------|-------------|-------------|
-| CUST001        | STHYD001       | Charlie  | charlie@mail.| 2        |
- | OR-001  | CUST001        | 2023-03-10  | PR-002       | 1       |
-com | 9876543213    | 1990-01-01  |
+CustomerCode | Name      | Email            |ContactNumber| 
+|------------|-----------|------------------|---------------|
+| CUST001    | Charlie   | charlie@mail.    | 9123131414    |
+
 
 ### Sheet2: CustomerOrders
-OrderCode  | CustomerCode | OrderDate   | ProductCode | Quantity |
-|---------|---------|------------|-------------|-----------|
- | OR-001  | CUST001        | 2023-03-10  | PR-001       
-### Sheet3: CustomerBilling
+OrderCode  | CustomerCode | EmployeCode   | StoreCode | ProductCode | NoOfIteams |Amount    |OrderDate |
+|----------|--------------|---------------|-----------|-------------|------------|----------|--------- |
+| OR-001   |   CUST001    | Emp001        |STHYD001   |  PR100      |       5    |500       |22-02-2024|
+| OR-001   |   CUST001    | Emp001        |STHYD001   |  PR101      |       7    |500       |22-02-2024|
+| OR-001   |   CUST001    | Emp001        |STHYD001   |  PR103      |       3    |500       |22-02-2024|
 
+
+### Sheet3: CustomerBilling
 | BillingNumber | ModeOfPayment | OrderCode | BillingDate  | Amount  |
-|--------|-----------|---------|--------------|---------|
-| OR-001-01    | Cash     | OR-001     | 2023-03-10   | 500.00  |
-| OR-001-02    | PhonePay  | OR-001     | 2023-03-10   | 1000.00  |
+|-------------- |---------------|-----------|--------------|---------|
+| OR-001-01     | Cash          | OR-001    | 2023-03-10   | 500.00  |
+| OR-001-02     | PhonePay      | OR-001    | 2023-03-10   | 1000.00 |
 
 # 4. Stock Information (Stock.txt)
 ## Format: Semicolon-delimited.
 ### Sample Data:
-    ProductID;ProductCode;StoreID;ProductName;QuantityAvailable;PricePerUnit
-    101;PR-001;1;Soap;50;10.00
-    102;PR-002;1;Shampoo;30;50.00
+    ProductCode;StoreID;ProductName;QuantityAvailable;Date;PricePerUnit
+    PR-001;STHYD001;Soap;50;10.00;27-11-2024;20
+    PR-002;STHYD001;Shampoo;30;50.00;27-11-2024;21
 
 
 # Database Schema
@@ -122,66 +124,106 @@ OrderCode  | CustomerCode | OrderDate   | ProductCode | Quantity |
 ### 1. Stores Table
 | Column Name   | Data Type      | Constraints       |
 |---------------|----------------|-------------------|
-| StoreID       | INT            | Primary Key       |
-| StoreCode     | VARCHAR(50)    | NOT NULL	     |
+| StoreIdPk     | INT            | PrimaryKey,AutoIc |
+| StoreCode     | VARCHAR(50)    | NOT NULL,Unique   |
 | StoreName     | VARCHAR(100)   | NOT NULL          |
-| City          | VARCHAR(50)    | NOT NULL          |
+| Location      | VARCHAR(50)    | NOT NULL          |
 | ManagerName   | VARCHAR(100)   |                   |
-| ContactNumber | VARCHAR(15)    |                   |
-
+| ContactNumber | VARCHAR(15)    | NOT NULL          |
+     
 ### 2. Employees Table
-| Column Name     | Data Type      | Constraints             |
+| Column Name      | Data Type       | Constraints            |
 |------------------|----------------|-------------------------|
-| EmployeeID       | INT            | Primary Key             |
-| StoreID          | INT            | Foreign Key (Stores)    |
+| EmployeeIdPk     | INT            | Primary Key,AutoIc      |
+| EmpCode          | varchar(50)    | Not Null,Unique         |
 | EmployeeName     | VARCHAR(100)   | NOT NULL                |
 | Role             | VARCHAR(50)    |                         |
 | DateOfJoining    | DATE           |                         |
-| ContactNumber    | VARCHAR(15)    |                         |
+| DatofLeaving     | DATE           |                         |
+| ContactNumber    | VARCHAR(15)    | Uniqe,Not Null          |
+| Gender           | VARCHAR(10)    |                         |
+| Salary           | DECIMAL(10, 2) | Not Null                |
+| StoreIdFk        | INT            | Foreign Key (Stores)    |
+
 	
 ### 3. Customers Table
-| Column Name     | Data Type      | Constraints          |
+| Column Name      | Data Type      | Constraints          |
 |------------------|----------------|----------------------|
-| CustomerID       | INT            | Primary Key          |
-| StoreID          | INT            | Foreign Key (Stores) |
+| CustomerIdPk     | INT            | Primary Key,AutoIc   |
+| CustomerCode     | VARCHAR(15)    | NOT NULL,Unique      |
 | Name             | VARCHAR(100)   | NOT NULL             |
 | Email            | VARCHAR(100)   | 		           |
-| ContactNumber    | VARCHAR(15)    |   NOT NULL           |
-| DateOfBirth      | DATE           |                      |
+| ContactNumber    | VARCHAR(15)    | NOT NULL,Unique      |
+
 
 ### 4. Orders Table
 | Column Name   | Data Type      | Constraints             |
 |---------------|----------------|-------------------------|
-| OrderID       | INT            | Primary Key             |
-| InvoiceNumber | VARCHAR(512)   |  NOT NULL               |
-| CustomerID    | INT            | Foreign Key (Customers) |
+| OrderIdPk     | INT            | Primary Key,AutoIc      |
+| StoreIdFk     | INT            | Foreign Key (Stores)    |
+| CustomerIdFk  | INT            | Foreign Key (Customers) |
+| EmployeeIdFk  | INT            | Foreign Key (Employee)  |
 | OrderDate     | DATE           |  NOT NULL               |
-| ProductID     | INT            |  NOT NULL               |
-| Quantity      | INT            |  NOT NULL               |
+| NoOfItems     | Int            |  NOT NULL               |
+| Amount        | DECIMAL(10, 2) | NOT Null                |
+| OrderCode     | VARCHAR(15)    | NOT NULL,Unique         |
 
-### 5. Billing Table
+
+### 5. OrderProducts Table
+| Column Name   | Data Type      | Constraints                   |
+|---------------|----------------|-------------------------------|
+|OrderProductsId| INT            |  Primary Key,AutoIc     	 |
+<<<<<<< HEAD
+| OrderID       | INT            | Foreign Key(Orders)     	 |
+| ProductID     | INT            |  Foreign Key (ProductMaster)  |
+| Quantity      | DECIMAL(10, 2) |         not null          |
+=======
+| OrderIdFk     | INT            | Foreign Key(Orders)     	 |
+| ProductIdFk   | INT            |  Foreign Key (ProductMaster)  |
+| Quantity      | DECIMAL(10, 2) |  NOT NULL                     |
+| PricePerUnit  | DECIMAL(10, 2) |  NOT Null                     |
+| Amount        | DECIMAL(10, 2) |  NOT Null                     |
+
+>>>>>>> 6b8eacc5eaa0bfa60b2fac7874a279d5a8313f20
+
+
+
+### 6. Billing Table
 | Column Name   | Data Type      | Constraints         |
 |---------------|----------------|---------------------|
-| BillID        | INT            | Primary Key         |
+| BillIdPk      | INT            | Primary Key,AutoIc  |
 | BillNumber    | VARCHAR(512)   | NOT NULL            |
-| OrderID       | INT            | Foreign Key (Orders)|
+| OrderIdFk     | INT            | Foreign Key (Orders)|
 | PaymentMode   | VARCHAR(50)    |  NOT NULL           |
 | BillingDate   | DATE           |  NOT NULL           |
 | Amount        | DECIMAL(10, 2) |  NOT NULL           |
 
-### 6. Stock Table
+
+
+### 7. Stock Table
 | Column Name        | Data Type      | Constraints          |
-|---------------------|----------------|----------------------|
-| ProductID          | INT            | Primary Key          |
+|--------------------|----------------|--------------------- |
+| StockIdPk          | INT            |  Primary Key         |
+| ProductIdFk        | INT            | Foreign Key (ProMast)|
+| StoreIdFk          | INT            | Foreign Key (Stores) |
+| Date               | Date           | NOT Null             |
+| QuantityAvailable  | DECIMAL(10, 2) | NOT Null             |
+
+
+### 8. ProductsMaster Table
+| Column Name        | Data Type      | Constraints          |
+|--------------------|----------------|--------------------- |
+| ProductIdPk        | INT            | Primary Key          |
 | ProductCode        | VARCHAR(500)   |                      |
-| StoreID            | INT            | Foreign Key (Stores) |
-| ProductName        | NVARCHAR(100)  | NOT NULL             |
-| QuantityAvailable  | INT            |                      |
-| PricePerUnit       | DECIMAL(10, 2) |                      |
+| ProductName        | VARCHAR(100)   | NOT NULL             |
+| PricePerUnit       | DECIMAL(10, 2) | NOT Null             |
+
+
+
 
 # Business Rules
 1. The Order of files processing would be Store-> Stock -> Customers->Orders-> Billing
-2. 
+
 ## Validation:
 1. StoreID in each file must exist in the Stores table.
 2. Email addresses must be in a valid format.

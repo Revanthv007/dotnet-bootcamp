@@ -26,7 +26,7 @@ below are Files Info
 
 The store will send all these files into a shared path location in server. which is (D:/DailyDataLoad/<StoreCode> Ex:D:/DailyDataLoad/STHYD001 )
 
-Now The below task is the complete information about the task to push this data into Central database tables.
+Now The below task is the complete information about the task to push this data into Central database tables. 
 Todo that we need to implement a logic to see D:/DailyDataLoad folder every one hour recursively read all stores related files and validate them and store them into the DB.
 while performing this job we wanted to logs and status information about how many files got processed.
 
@@ -122,95 +122,66 @@ OrderCode  | CustomerCode | OrderDate   | ProductCode | Quantity |
 ### 1. Stores Table
 | Column Name   | Data Type      | Constraints       |
 |---------------|----------------|-------------------|
-| StoreIdPk     | INT            | PrimaryKey,AutoIc |
-| StoreCode     | VARCHAR(50)    | NOT NULL,Unique   |
+| StoreID       | INT            | Primary Key       |
+| StoreCode     | VARCHAR(50)    | NOT NULL	     |
 | StoreName     | VARCHAR(100)   | NOT NULL          |
-| Location      | VARCHAR(50)    | NOT NULL          |
+| City          | VARCHAR(50)    | NOT NULL          |
 | ManagerName   | VARCHAR(100)   |                   |
-| ContactNumber | VARCHAR(15)    | NOT NULL          |
-     
+| ContactNumber | VARCHAR(15)    |                   |
+
 ### 2. Employees Table
-| Column Name      | Data Type       | Constraints            |
+| Column Name     | Data Type      | Constraints             |
 |------------------|----------------|-------------------------|
-| EmployeeIdPk     | INT            | Primary Key,AutoIc      |
+| EmployeeID       | INT            | Primary Key             |
+| StoreID          | INT            | Foreign Key (Stores)    |
 | EmployeeName     | VARCHAR(100)   | NOT NULL                |
 | Role             | VARCHAR(50)    |                         |
 | DateOfJoining    | DATE           |                         |
-| DatofLeaving     | DATE           |                         |
-| ContactNumber    | VARCHAR(15)    | Uniqe,Not Null          |
-| Gender           | VARCHAR(10)    |                         |
-| Salary           | DECIMAL(10, 2) | Not Null                |
-| StoreIdFk        | INT            | Foreign Key (Stores)    |
-
+| ContactNumber    | VARCHAR(15)    |                         |
 	
 ### 3. Customers Table
-| Column Name      | Data Type      | Constraints          |
+| Column Name     | Data Type      | Constraints          |
 |------------------|----------------|----------------------|
-| CustomerIdPk     | INT            | Primary Key,AutoIc   |
+| CustomerID       | INT            | Primary Key          |
+| StoreID          | INT            | Foreign Key (Stores) |
 | Name             | VARCHAR(100)   | NOT NULL             |
 | Email            | VARCHAR(100)   | 		           |
-| ContactNumber    | VARCHAR(15)    | NOT NULL,Unique      |
-
+| ContactNumber    | VARCHAR(15)    |   NOT NULL           |
+| DateOfBirth      | DATE           |                      |
 
 ### 4. Orders Table
 | Column Name   | Data Type      | Constraints             |
 |---------------|----------------|-------------------------|
-| OrderIdPk     | INT            | Primary Key,AutoIc      |
-| StoreIdFk     | INT            | Foreign Key (Stores)    |
-| CustomerIdFk  | INT            | Foreign Key (Customers) |
-| EmployeeIdFk  | INT            | Foreign Key (Employee)  |
+| OrderID       | INT            | Primary Key             |
+| InvoiceNumber | VARCHAR(512)   |  NOT NULL               |
+| CustomerID    | INT            | Foreign Key (Customers) |
 | OrderDate     | DATE           |  NOT NULL               |
-| Amount        | DECIMAL(10, 2) | NOT Null                |
+| ProductID     | INT            |  NOT NULL               |
+| Quantity      | INT            |  NOT NULL               |
 
-
-
-### 5. OrderProducts Table
-| Column Name   | Data Type      | Constraints                   |
-|---------------|----------------|-------------------------------|
-|OrderProductsId| INT            |  Primary Key,AutoIc     	 |
-| OrderIdFk     | INT            | Foreign Key(Orders)     	 |
-| ProductIdFk   | INT            |  Foreign Key (ProductMaster)  |
-| Quantity      | DECIMAL(10, 2) |  NOT NULL                     |
-| PricePerUnit  | DECIMAL(10, 2) |  NOT Null                     |
-
-
-
-
-### 6. Billing Table
+### 5. Billing Table
 | Column Name   | Data Type      | Constraints         |
 |---------------|----------------|---------------------|
-| BillIdPk      | INT            | Primary Key,AutoIc  |
+| BillID        | INT            | Primary Key         |
 | BillNumber    | VARCHAR(512)   | NOT NULL            |
-| OrderIdFk     | INT            | Foreign Key (Orders)|
+| OrderID       | INT            | Foreign Key (Orders)|
 | PaymentMode   | VARCHAR(50)    |  NOT NULL           |
 | BillingDate   | DATE           |  NOT NULL           |
 | Amount        | DECIMAL(10, 2) |  NOT NULL           |
 
-
-
-### 7. Stock Table
+### 6. Stock Table
 | Column Name        | Data Type      | Constraints          |
-|--------------------|----------------|--------------------- |
-| StockIdPk          | INT            |  Primary Key         |
-| ProductIdFk        | INT            | Foreign Key (ProMast)|
-| StoreIdFk          | INT            | Foreign Key (Stores) |
-| QuantityAvailable  | DECIMAL(10, 2) | NOT Null             |
-
-
-### 8. ProductsMaster Table
-| Column Name        | Data Type      | Constraints          |
-|--------------------|----------------|--------------------- |
-| ProductIdPk        | INT            | Primary Key          |
+|---------------------|----------------|----------------------|
+| ProductID          | INT            | Primary Key          |
 | ProductCode        | VARCHAR(500)   |                      |
-| ProductName        | VARCHAR(100)   | NOT NULL             |
-| PricePerUnit       | DECIMAL(10, 2) | NOT Null             |
-
-
-
+| StoreID            | INT            | Foreign Key (Stores) |
+| ProductName        | NVARCHAR(100)  | NOT NULL             |
+| QuantityAvailable  | INT            |                      |
+| PricePerUnit       | DECIMAL(10, 2) |                      |
 
 # Business Rules
 1. The Order of files processing would be Store-> Stock -> Customers->Orders-> Billing
-
+2. 
 ## Validation:
 1. StoreID in each file must exist in the Stores table.
 2. Email addresses must be in a valid format.

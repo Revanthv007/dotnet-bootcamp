@@ -1,9 +1,9 @@
 # Task: E-commerce Order Synchronization System
 ## Backstory of the Task
-As the head of an e-commerce company, I want to synchronize daily data from warehouses and partner stores into a centralized order management system (OMS). Each partner operates locally, tracking orders, returns, and inventory on a local database. Internet connectivity issues prevent real-time synchronization, so partners send daily transaction files to a central location.
+As the head of an e-commerce company, I want to synchronize daily data from warehouses into a centralized order management system (OMS). Each warehouses operates locally, tracking orders, returns, and inventory on a local database. Internet connectivity issues prevent real-time synchronization, so warehouses send daily transaction files to a central location.
 
 ## Current Challenges:
-Partners operate in remote locations with limited or no reliable internet.
+warehouses operate in remote locations with limited or no reliable internet.
 Transactional data (e.g., orders, returns, inventory updates) is tracked locally and sent to the central OMS at the end of the day.
 Files are not always uniform in format, requiring robust validation and error handling.
 Dependencies exist between the files, such as inventory availability before processing orders or validating returns.
@@ -11,7 +11,7 @@ Dependencies exist between the files, such as inventory availability before proc
 ## Objective:
 Build a system that:
 
-1. Processes daily files (CSV, Text, JSON, XML, Excel) received from partners and warehouses.
+1. Processes daily files (CSV, Text, JSON, XML, Excel) received from  warehouses.
 2. Validates the data for integrity and applies business rules.
 3. Populates the centralized database with validated data.
 4. Logs the status of each file, number of records processed, and any errors encountered.
@@ -35,7 +35,7 @@ Files are provided in the following formats:
 1. Orders: Orders_yyyyMMdd.csv (Comma-delimited)
 2. Returns: Returns_yyyyMMdd.xml
 3. Inventory Updates: Inventory_yyyyMMdd.json
-4. Partner Information: Partners_yyyyMMdd.txt (Pipe-delimited)
+4. warehouses Information: warehouses_yyyyMMdd.txt (Pipe-delimited)
 5. Product Details: ProductDetails_yyyyMMdd.xlsx with multiple sheets:
 	- Sheet1: Products
 	- Sheet2: ProductCategories
@@ -45,7 +45,7 @@ Files are provided in the following formats:
 #### Format: Comma-delimited
 #### Sample Data:
 
-    OrderID,PartnerCode,CustomerID,ProductID,OrderDate,Quantity,TotalAmount
+    OrderID,warehousesCode,CustomerID,ProductID,OrderDate,Quantity,TotalAmount
     101,WHHYD001,CUST001,PRD001,2023-11-21,2,500.00
     102,PRTBLR002,CUST002,PRD002,2023-11-21,1,300.00
 	
@@ -71,27 +71,27 @@ Files are provided in the following formats:
 `[
   {
     "ProductID": "PRD001",
-    "PartnerCode": "WHHYD001",
+    "warehousesCode": "WHHYD001",
     "StockDate": "2023-11-21",
     "QuantityAvailable": 100,
     "PricePerUnit": 250.00
   },
   {
     "ProductID": "PRD002",
-    "PartnerCode": "PRTBLR002",
+    "warehousesCode": "PRTBLR002",
     "StockDate": "2023-11-21",
     "QuantityAvailable": 50,
     "PricePerUnit": 300.00
   }
 ]`
 
-#### 4. Partner Information (Partners.txt)
+#### 4. warehouses Information (Partners.txt)
 #### Format: Pipe-delimited
 #### Sample Data:
 
-    PartnerCode|PartnerName|Location|ContactNumber
+    warehousesCode|warehousesName|Location|ContactNumber
     WHHYD001|Hyderabad Warehouse|Hyderabad|9876543210
-    PRTBLR002|Bangalore Partner|Bangalore|9876543211
+    PRTBLR002|Bangalorewarehouses|Bangalore|9876543211
 
 #### 5. Product Details (ProductDetails.xlsx)
 #### Sheet1: Products
@@ -109,12 +109,12 @@ Sheet2: ProductCategories
 |2			|Hair Care      |
 # Database Schema
 
-## 1. Partners Table
+## 1. warehouses Table
 | Column Name   | Data Type      | Constraints            |
 |---------------|----------------|------------------------|
-| PartnerID     | INT            | Primary Key            |
-| PartnerCode   | VARCHAR(50)    | NOT NULL, UNIQUE       |
-| PartnerName   | VARCHAR(100)   | NOT NULL               |
+|warehousesID     | INT            | Primary Key            |
+| warehousesCode   | VARCHAR(50)    | NOT NULL, UNIQUE       |
+| warehousesName   | VARCHAR(100)   | NOT NULL               |
 | Location      | VARCHAR(50)    |                        |
 | ContactNumber | VARCHAR(15)    |                        |
 
@@ -126,6 +126,7 @@ Sheet2: ProductCategories
 | ProductID          | INT            | Primary Key          |
 | ProductName        | VARCHAR(100)   | NOT NULL             |
 | CategoryID         | INT            | Foreign Key          |
+|warehousesId        | INT            | Foreign Key          |
 | PricePerUnit       | DECIMAL(10, 2) |                      |
 | QuantityAvailable  | INT            |                      |
 
@@ -143,7 +144,7 @@ Sheet2: ProductCategories
 | Column Name      | Data Type      | Constraints             |
 |-------------------|----------------|-------------------------|
 | OrderID          | INT            | Primary Key             |
-| PartnerID        | INT            | Foreign Key (Partners)  |
+| warehousesID        | INT            | Foreign Key (Partners)  |
 | CustomerID       | VARCHAR(50)    |                         |
 | ProductID        | INT            | Foreign Key (Products)  |
 | OrderDate        | DATE           |                         |
@@ -160,6 +161,21 @@ Sheet2: ProductCategories
 | ReturnDate       | DATE           |                         |
 | Reason           | VARCHAR(100)   |                         |
 | AmountRefunded   | DECIMAL(10, 2) |                         |
+
+## 6. Customer Table
+| Column Name      | Data Type      | Constraints             |
+|-------------------|----------------|-------------------------|
+| CustomerID         | INT            | Primary Key             |
+| customername      | varchar(100)          |                         |
+| Phoneno         | VARCHAR(100)   |  Not Null                       |
+
+## 6. Employee Table
+| Column Name      | Data Type      | Constraints             |
+|-------------------|----------------|-------------------------|
+| EmpID         | INT            | Primary Key             |
+| EmpName      | varchar(100)          |                         |
+| Phoneno         | VARCHAR(100)   |  Not Null                       |
+
 
 ## Business Rules
 ### Validation:
@@ -181,6 +197,7 @@ Log all activities in D:/Logs/EcommerceDataLog.txt.
 
 ### Sample log entries:
 [Timestamp] INFO: Successfully processed PartnerCode: WHHYD001. Files: 4, Records: 150
+
 [Timestamp] ERROR: Insufficient stock for OrderID: 102, ProductID: PRD002.
 
 ### Log Success and Failure Counts:

@@ -122,7 +122,7 @@ OrderCode  | CustomerCode | OrderDate   | ProductCode | Quantity |
 ### 1. Stores Table
 | Column Name   | Data Type      | Constraints       |
 |---------------|----------------|-------------------|
-| StoreIdPk     | INT            | PrimaryKey,AutoIc |
+| StoreID       | INT            | PrimaryKey,AutoIc |
 | StoreCode     | VARCHAR(50)    | NOT NULL,Unique   |
 | StoreName     | VARCHAR(100)   | NOT NULL          |
 | Location      | VARCHAR(50)    | NOT NULL          |
@@ -132,21 +132,21 @@ OrderCode  | CustomerCode | OrderDate   | ProductCode | Quantity |
 ### 2. Employees Table
 | Column Name      | Data Type       | Constraints            |
 |------------------|----------------|-------------------------|
-| EmployeeIdPk     | INT            | Primary Key,AutoIc      |
+| EmployeeID       | INT            | Primary Key,AutoIc      |
 | EmployeeName     | VARCHAR(100)   | NOT NULL                |
 | Role             | VARCHAR(50)    |                         |
 | DateOfJoining    | DATE           |                         |
 | DatofLeaving     | DATE           |                         |
 | ContactNumber    | VARCHAR(15)    | Uniqe,Not Null          |
 | Gender           | VARCHAR(10)    |                         |
-| Salary           | DECIMAL(10, 2) | Not Null                |
-| StoreIdFk        | INT            | Foreign Key (Stores)    |
+| Salary           | Int            | Not Null                |
+| StoreID          | INT            | Foreign Key (Stores)    |
 
 	
 ### 3. Customers Table
 | Column Name      | Data Type      | Constraints          |
 |------------------|----------------|----------------------|
-| CustomerIdPk     | INT            | Primary Key,AutoIc   |
+| CustomerID       | INT            | Primary Key,AutoIc   |
 | Name             | VARCHAR(100)   | NOT NULL             |
 | Email            | VARCHAR(100)   | 		           |
 | ContactNumber    | VARCHAR(15)    | NOT NULL,Unique      |
@@ -155,55 +155,50 @@ OrderCode  | CustomerCode | OrderDate   | ProductCode | Quantity |
 ### 4. Orders Table
 | Column Name   | Data Type      | Constraints             |
 |---------------|----------------|-------------------------|
-| OrderIdPk     | INT            | Primary Key,AutoIc      |
-| StoreIdFk     | INT            | Foreign Key (Stores)    |
-| CustomerIdFk  | INT            | Foreign Key (Customers) |
-| EmployeeIdFk  | INT            | Foreign Key (Employee)  |
+| OrderID       | INT            | Primary Key,AutoIc      |
+| StoreID       | INT            | Foreign Key (Stores)    |
+| CustomerID    | INT            | Foreign Key (Customers) |
+| EmployeeID    | INT            | Foreign Key (Employee)  |
 | OrderDate     | DATE           |  NOT NULL               |
-| Amount        | DECIMAL(10, 2) | NOT Null                |
-
 
 
 ### 5. OrderProducts Table
 | Column Name   | Data Type      | Constraints                   |
 |---------------|----------------|-------------------------------|
 |OrderProductsId| INT            |  Primary Key,AutoIc     	 |
-| OrderIdFk     | INT            | Foreign Key(Orders)     	 |
-| ProductIdFk   | INT            |  Foreign Key (ProductMaster)  |
-| Quantity      | DECIMAL(10, 2) |  NOT NULL                     |
-| PricePerUnit  | DECIMAL(10, 2) |  NOT Null                     |
-
+| OrderID       | INT            | Foreign Key(Orders)     	 |
+| ProductID     | INT            |  Foreign Key (ProductMaster)  |
+| Quantity      | INT            |  Foreign Key (ProductMaster)  |
 
 
 
 ### 6. Billing Table
 | Column Name   | Data Type      | Constraints         |
 |---------------|----------------|---------------------|
-| BillIdPk      | INT            | Primary Key,AutoIc  |
+| BillID        | INT            | Primary Key,AutoIc  |
 | BillNumber    | VARCHAR(512)   | NOT NULL            |
-| OrderIdFk     | INT            | Foreign Key (Orders)|
+| OrderID       | INT            | Foreign Key (Orders)|
 | PaymentMode   | VARCHAR(50)    |  NOT NULL           |
 | BillingDate   | DATE           |  NOT NULL           |
 | Amount        | DECIMAL(10, 2) |  NOT NULL           |
 
 
-
 ### 7. Stock Table
 | Column Name        | Data Type      | Constraints          |
 |--------------------|----------------|--------------------- |
-| StockIdPk          | INT            |  Primary Key         |
-| ProductIdFk        | INT            | Foreign Key (ProMast)|
-| StoreIdFk          | INT            | Foreign Key (Stores) |
-| QuantityAvailable  | DECIMAL(10, 2) | NOT Null             |
+| StockID            | INT            |  Primary Key         |
+| ProductID          | INT            | Foreign Key (ProMast)|
+| StoreID            | INT            | Foreign Key (Stores) |
+| QuantityAvailable  | INT            | Not Null             |
 
 
 ### 8. ProductsMaster Table
 | Column Name        | Data Type      | Constraints          |
 |--------------------|----------------|--------------------- |
-| ProductIdPk        | INT            | Primary Key          |
+| ProductID          | INT            | Primary Key          |
 | ProductCode        | VARCHAR(500)   |                      |
 | ProductName        | VARCHAR(100)   | NOT NULL             |
-| PricePerUnit       | DECIMAL(10, 2) | NOT Null             |
+| PricePerUnit       | DECIMAL(10, 2) | Not Null             |
 
 
 
