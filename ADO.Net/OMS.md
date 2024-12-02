@@ -45,9 +45,9 @@ Files are provided in the following formats:
 #### Format: Comma-delimited
 #### Sample Data:
 
-    OrderID,warehousesCode,CustomerID,ProductID,OrderDate,Quantity,TotalAmount
-    101,WHHYD001,CUST001,PRD001,2023-11-21,2,500.00
-    102,PRTBLR002,CUST002,PRD002,2023-11-21,1,300.00
+    OrderID,warehousesCode,CustomerID,ProductCode,OrderDate,Quantity,TotalAmount
+    101,WH001,CUST001,PRD001,2023-11-21,2,500.00
+    102,WH002,CUST002,PRD002,2023-11-21,1,300.00
 	
 #### 2. Returns (Returns.xml)
 #### Format: XML
@@ -90,23 +90,23 @@ Files are provided in the following formats:
 #### Sample Data:
 
     warehousesCode|warehousesName|Location|ContactNumber
-    WHHYD001|Hyderabad Warehouse|Hyderabad|9876543210
-    PRTBLR002|Bangalorewarehouses|Bangalore|9876543211
+    WH001|Hyderabad Warehouse|Hyderabad|9876543210
+    WH002|Bangalorewarehouses|Bangalore|9876543211
 
 #### 5. Product Details (ProductDetails.xlsx)
 #### Sheet1: Products
 
-|ProductID	|ProductName|	CategoryID|	PricePerUnit	|QuantityAvailable|
+|ProductCode|ProductName|	CategoryCode|	PricePerUnit	|QuantityAvailable|
 |---------|---------|------------|-------------|-----------|
 |PRD001|	Soap|	1|	50.00|	100|
 |PRD002	|Shampoo	|2|	150.00|	50|
 
 Sheet2: ProductCategories
 
-|CategoryID	|CategoryName	|
+|CategoryCode	|CategoryName	|
 |------------|-------|
-|1			|Personal Care  |
-|2			|Hair Care      |
+|CAT001			|Personal Care  |
+|CAT002			|Hair Care      |
 # Database Schema
 
 ## 1. warehouses Table
@@ -119,20 +119,28 @@ Sheet2: ProductCategories
 | ContactNumber | VARCHAR(15)    |                        |
 
 ---
+## 2. Employee Table
+| Column Name      | Data Type      | Constraints             |
+|-------------------|----------------|-------------------------|
+| EmpID         | INT            | Primary Key             |
+|EmpCode	| Varchar(33) 	|unique,not null|
+| EmpName      | varchar(100)          |                         |
+| Phoneno         | VARCHAR(100)   |  Not Null                       |
 
-## 2. Products Table
+
+## 3. Products Table
 | Column Name        | Data Type      | Constraints          |
 |---------------------|----------------|----------------------|
 | ProductID          | INT            | Primary Key          |
 | ProductName        | VARCHAR(100)   | NOT NULL             |
-| CategoryID         | INT            | Foreign Key          |
-|warehousesId        | INT            | Foreign Key          |
+| CategoryID       | VARCHAR(322) | Foreign Key          |
+|warehousesCode       | INT            | Foreign Key          |
 | PricePerUnit       | DECIMAL(10, 2) |                      |
 | QuantityAvailable  | INT            |                      |
 
 ---
 
-## 3. ProductCategories Table
+## 5. ProductCategories Table
 | Column Name  | Data Type      | Constraints       |
 |--------------|----------------|-------------------|
 | CategoryID   | INT            | Primary Key       |
@@ -140,10 +148,33 @@ Sheet2: ProductCategories
 
 ---
 
-## 4. Orders Table
+## 6. Inventory Table
+| Column Name  | Data Type      | Constraints       |
+|--------------|----------------|-------------------|
+| InventoryId  | INT            | Primary Key       |
+| WareHouseidfk | int  |Foreign key          |
+| Productidfk | int  |Foreign key          |
+| Date | date  |Not Null         |
+| AvailbleQuantity | decimal(12,3)  |Not Null |
+| PricePerUnit | decimal(12,3)  |Not Null|
+| RemainingjQuantity | decimal(12,3)  |Not Null |
+
+
+## 7. Customer Table
+| Column Name      | Data Type      | Constraints             |
+|-------------------|----------------|-------------------------|
+| CustomerID         | INT            | Primary Key             |
+| customername      | varchar(100)          |                         |
+| Phoneno         | VARCHAR(100)   |  Not Null                       |
+
+
+
+
+## 8. Orders Table
 | Column Name      | Data Type      | Constraints             |
 |-------------------|----------------|-------------------------|
 | OrderID          | INT            | Primary Key             |
+|InvoiceNumber	   | varchar(34)    |varchar(22)	|
 | warehousesID        | INT            | Foreign Key (Partners)  |
 | CustomerID       | VARCHAR(50)    |                         |
 | ProductID        | INT            | Foreign Key (Products)  |
@@ -152,8 +183,19 @@ Sheet2: ProductCategories
 | TotalAmount      | DECIMAL(10, 2) |                         |
 
 ---
+## 9. OrdersItems
+| Column Name      | Data Type      | Constraints             |
+|-------------------|----------------|-------------------------|
+| OrderItemID          | INT            | Primary Key             |
+| warehousesID        | INT            | Foreign Key (Partners)  |
+| OrderID       | VARCHAR(50)    |                         |
+| ProductID        | INT            | Foreign Key (Products)  |
+| OrderDate        | DATE           |                         |
+| Quantity         | INT            |                         |
+| TotalAmount      | DECIMAL(10, 2) |                         |
 
-## 5. Returns Table
+
+## 10. Returns Table
 | Column Name      | Data Type      | Constraints             |
 |-------------------|----------------|-------------------------|
 | ReturnID         | INT            | Primary Key             |
@@ -162,19 +204,7 @@ Sheet2: ProductCategories
 | Reason           | VARCHAR(100)   |                         |
 | AmountRefunded   | DECIMAL(10, 2) |                         |
 
-## 6. Customer Table
-| Column Name      | Data Type      | Constraints             |
-|-------------------|----------------|-------------------------|
-| CustomerID         | INT            | Primary Key             |
-| customername      | varchar(100)          |                         |
-| Phoneno         | VARCHAR(100)   |  Not Null                       |
 
-## 6. Employee Table
-| Column Name      | Data Type      | Constraints             |
-|-------------------|----------------|-------------------------|
-| EmpID         | INT            | Primary Key             |
-| EmpName      | varchar(100)          |                         |
-| Phoneno         | VARCHAR(100)   |  Not Null                       |
 
 
 ## Business Rules
